@@ -21,7 +21,7 @@ module.exports = {
 
   listAssets: function (req, res) {
     const userId = req.userId;
-    Asset.find({ user_id: userId }).exec(function (err, assets) {
+    Asset.find({ user_id: userId }, ["title", "description", "_id", "form"] ).exec(function (err, assets) {
       if (err) {
         res.status(400).json({
           message: err,
