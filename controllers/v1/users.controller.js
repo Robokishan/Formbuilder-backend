@@ -33,7 +33,10 @@ module.exports = {
   },
 
   validateUser: function (req, res) {
-    User.findOne({ user_name: req.body.user_name }, async (err, user) => {
+    User.findOne({ email: req.body.email }, async (err, user) => {
+      if ( !user ) return res.status(401).json({
+        message: "bad credentials",
+      });
       const { isValid } = await verifyPassword(req.body.password, user);
       if (isValid != true)
         return res.status(401).json({
