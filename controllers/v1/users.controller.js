@@ -5,6 +5,7 @@ var bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 var config = require("../../config/config");
 const saltRounds = config.SALT_ROUNDS;
+
 module.exports = {
   createUser: function (req, res) {
     let user = new User();
@@ -62,18 +63,14 @@ module.exports = {
   },
 
   getOwner(req, res) {
-    User.getowner(req).then((result) => {
-      return res
-        .status(200)
-        .json(result)
-        .catch((error) => {
-          return res.status(403).json({
-            message:
-              process.env.NODE_ENV != "production"
-                ? error
-                : "Something went wrong",
-          });
-        });
+    User.findOne({ id: req.userId }, ['id','email', "user_name", "name"], async (err, user) => {
+      if(err) return res.status(400).json({
+        message: err,
+      });
+      else {
+
+        return res.status(200).json(user);
+      }
     });
   },
 };

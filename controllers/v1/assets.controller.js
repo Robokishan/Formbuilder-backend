@@ -1,6 +1,4 @@
 /* asset Controllers */
-
-var User = require("../../models/mongo/v1/User");
 var Asset = require("../../models/mongo/v1/Form");
 
 module.exports = {

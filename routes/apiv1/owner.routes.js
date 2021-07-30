@@ -22,7 +22,7 @@ var ownerController = require('./../../controllers/v1/users.controller');
  *      security:
  *        - authorization: []
  */
-// router.get('/detail', ownerController.getOwner)
+router.get('/detail', ownerController.getOwner)
 
 /**
  * @swagger
