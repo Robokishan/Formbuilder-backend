@@ -1,34 +1,10 @@
 var router = require('express').Router();
 var assetController = require('../../controllers/v1/assets.controller');
-//everyt asset route data, data modification, asset rename, asset add , asset delete
-//asset rename, asset add , asset delete
 
-
-/**
- * @swagger 
- * /api/v1/asset:
- *  get: 
- *      tags:
- *       - "Asset"  
- *      description: List of assets of current user
- *      produces:
- *       - application/json
- *      consumes:
- *       - application/json
- *      responses:
- *          200:
- *              description: OK
- *          401:
- *              description: Unauthorized
- *          403:
- *              description: "Forbidden"
- *          404:
- *              description: "Not Found"
- *      security:
- *        - authorization: []
- */
-// router.get('/',                 assetController.listAssets)
-
+router.get('/',                 assetController.listAssets)
+router.delete('/:assetId',assetController.deleteAsset);
+router.put('/:assetId', assetController.editAsset);
+router.get('/:assetId', assetController.getAsset);
 /**
  * @swagger 
  * /api/v1/asset/data/{assetId}: 

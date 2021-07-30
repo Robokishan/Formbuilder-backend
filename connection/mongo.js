@@ -9,6 +9,7 @@ async function connectToDB() {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
+            useFindAndModify: false
         });
         
         console.log('Succefully Connected To MongoDB');

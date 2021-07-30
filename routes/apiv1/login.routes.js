@@ -54,7 +54,7 @@ var assetController = require('../../controllers/v1/assets.controller');
  *          404:
  *              description: "Not Found"
  */
-// router.post('/owner/login', usersController.validateUser);
+router.post('/owner/login', usersController.validateUser);
 
 /**
  * @swagger
