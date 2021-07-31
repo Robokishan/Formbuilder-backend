@@ -10,8 +10,9 @@ module.exports = {
     newAsset.form = req.body.form;
     newAsset.save((err, asset) => {
       if (err) {
+        console.log(err)
         return res.status(400).json({
-          message: error,
+          message: err,
         });
       } else {
         return res.status(200).json(asset);
