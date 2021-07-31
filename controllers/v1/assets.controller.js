@@ -1,5 +1,7 @@
 /* asset Controllers */
 var Asset = require("../../models/mongo/v1/Form");
+var Answer = require("../../models/mongo/v1/FormAns");
+
 
 module.exports = {
   addAsset: function (req, res) {
@@ -28,7 +30,6 @@ module.exports = {
           message: err,
         });
       } else {
-        console.log(assets);
         return res.status(200).json(assets);
       }
     });
@@ -43,12 +44,23 @@ module.exports = {
           message: err,
         });
       } else {
-        console.log(assets);
         return res.status(200).json(assets);
       }
     });
   },
-
+  
+  getPublic: function (req, res) {
+    const assetId = req.params.assetId;
+    Asset.findOne({_id: assetId }).lean().exec(function (err, assets) {
+      if (err) {
+        res.status(400).json({
+          message: err,
+        });
+      } else {
+        return res.status(200).json(assets);
+      }
+    });
+  },
   
   editAsset: function (req, res) {
     const userId = req.userId;
@@ -84,12 +96,13 @@ module.exports = {
     Asset.findByIdAndRemove({
       user_id: userId,
       _id: assetId
-  },function(err, asset){
+  },async function(err, asset){
       if(err) {
         res.status(400).json({
           message: err,
         });
       } else {
+          await Answer.deleteMany({ form_id: assetId }).exec()
           console.log(asset);
           return res.status(200).json(asset);
       }
