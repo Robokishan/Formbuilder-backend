@@ -24,12 +24,16 @@ module.exports = {
 
   listAssets: function (req, res) {
     const userId = req.userId;
-    Asset.find({ user_id: userId }, ["title", "description", "_id", "form"] ).exec(function (err, assets) {
+    Asset.find({ user_id: userId }, ["title", "description", "_id", "form", "created_at", "updated_at"] ).lean().exec(async function (err, assets) {
       if (err) {
         res.status(400).json({
           message: err,
         });
       } else {
+        for (let asset of assets) {
+          const count = await Answer.countDocuments({form_id: asset._id }).exec()
+          asset["responsecount"] = count;
+        }
         return res.status(200).json(assets);
       }
     });
