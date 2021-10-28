@@ -1,18 +1,21 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  PrimaryColumn,
 } from "typeorm";
 
 @Entity()
-export class Profile {
-  @Column()
-  title: string;
+export class FormAns {
+  @PrimaryColumn({ name: "_id" })
+  id: string;
+
+  @Column({ nullable: true })
+  form_id: string;
 
   @Column()
-  description: string;
+  answers: object;
 
   @CreateDateColumn()
   created_at: Date;
