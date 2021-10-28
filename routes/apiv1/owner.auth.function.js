@@ -34,7 +34,8 @@ authentication = (req, res, next) => {
               console.log("error authentication");
               throw "expired";
             }
-            process.env.NODE_ENV != "production" ? console.log("AUTHENTICATION_V1", decoded):null;
+            // only enable if it is required
+            // process.env.NODE_ENV != "production" ? console.log("AUTHENTICATION_V1", decoded):null;
             req.userId = decoded.userId;
             req.owner = decoded;
             next();
