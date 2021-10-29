@@ -9,11 +9,11 @@ var Table = require("cli-table3");
 console.log("\nAPI for " + "quadx");
 console.log("********************************************");
 const listEndpoints = require("express-list-endpoints");
+
 // new methods
 import "reflect-metadata";
 const { ApolloServer } = require("apollo-server-express");
 import { buildSchema } from "type-graphql";
-import { BookResolver } from "./models/typeormEnt/v1/Bookresolver";
 import { createConnection, Connection } from "typeorm";
 import "dotenv-safe/config";
 
@@ -44,7 +44,7 @@ async function main() {
   //   await connection.connect();
 
   const schema = await buildSchema({
-    resolvers: [BookResolver, FormResolver, UserResolver, FormAnsResolver], // add this
+    resolvers: [FormResolver, UserResolver, FormAnsResolver], // add this
   });
   const server = new ApolloServer({ schema });
   server.applyMiddleware({ app, cors: false });
@@ -69,7 +69,7 @@ async function main() {
     }
     console.log(
       colors.green(
-        "🚀 Listening with " +
+        "🚀  Listening with " +
           process.env.NODE_ENV +
           " config on port " +
           config.PORT
