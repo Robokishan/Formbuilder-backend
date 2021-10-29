@@ -42,6 +42,24 @@ class UserAuth {
   token: Token;
 }
 
+@ObjectType()
+class FieldError {
+  @Field()
+  field: string;
+
+  @Field()
+  message: string;
+}
+
+@ObjectType()
+class UserResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+
+  @Field(() => UserAuth, { nullable: true })
+  user?: UserAuth;
+}
+
 @Resolver()
 export class UserResolver {
   @Query(() => [Users])
@@ -49,27 +67,29 @@ export class UserResolver {
     return Users.find();
   }
 
-  @Mutation(() => UserAuth)
+  @Mutation(() => UserResponse)
   async login(@Arg("options") options: EmailPasswordInput) {
     const user = await Users.findOne({ email: options.email });
-    console.log(user);
     const { isValid } = await verifyPassword(options.password, user);
     if (isValid != true) {
       return {
         errors: [
           {
-            name: "something went wrong",
+            field: "email",
+            message: "Somthing went wrong",
           },
         ],
       };
     } else {
       const accesstoken = createAccessToken(user);
       return {
-        name: user.name,
-        email: user.email,
-        token: {
-          access_token: accesstoken,
-          expires_in: (jwt.decode(accesstoken) as any).exp,
+        user: {
+          name: user.name,
+          email: user.email,
+          token: {
+            access_token: accesstoken,
+            expires_in: (jwt.decode(accesstoken) as any).exp,
+          },
         },
       };
       // return res
