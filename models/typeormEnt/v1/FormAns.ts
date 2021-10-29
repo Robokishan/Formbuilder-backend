@@ -29,7 +29,7 @@ export class formanswers extends BaseEntity {
     name: "form_id",
     referencedColumnName: "id",
   })
-  @Field()
+  @Field({ nullable: true })
   @Column()
   form_answers: Forms;
 
