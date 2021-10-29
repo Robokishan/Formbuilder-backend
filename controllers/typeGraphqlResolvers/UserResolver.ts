@@ -1,15 +1,47 @@
-import { Field, InputType, Query, Resolver, Root, UseMiddleware } from "type-graphql";
+import jwt from "jsonwebtoken";
+import {
+  Arg,
+  Field,
+  InputType,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { Users } from "../../models/typeormEnt/v1/User";
-
-@InputType
+import {
+  createAccessToken,
+  verifyPassword,
+} from "../../utils/ts/PasswordManager";
+@InputType()
 class EmailPasswordInput {
-    @Field()
-    email: string;
+  @Field()
+  email: string;
 
-    @Field()
-    password: string;
-
+  @Field()
+  password: string;
 }
+
+@ObjectType()
+class Token {
+  @Field()
+  access_token: string;
+
+  @Field()
+  expires_in: string;
+}
+@ObjectType()
+class UserAuth {
+  @Field()
+  name: string;
+
+  @Field()
+  email: string;
+
+  @Field()
+  token: Token;
+}
+
 @Resolver()
 export class UserResolver {
   @Query(() => [Users])
@@ -17,7 +49,46 @@ export class UserResolver {
     return Users.find();
   }
 
-  @Mutation(() => User)
-  async login(@Arg("options")) {      
+  @Mutation(() => UserAuth)
+  async login(@Arg("options") options: EmailPasswordInput) {
+    const user = await Users.findOne({ email: options.email });
+    console.log(user);
+    const { isValid } = await verifyPassword(options.password, user);
+    if (isValid != true) {
+      return {
+        errors: [
+          {
+            name: "something went wrong",
+          },
+        ],
+      };
+    } else {
+      const accesstoken = createAccessToken(user);
+      return {
+        name: user.name,
+        email: user.email,
+        token: {
+          access_token: accesstoken,
+          expires_in: (jwt.decode(accesstoken) as any).exp,
+        },
+      };
+      // return res
+      //   .cookie("token", accesstoken, {
+      //     // expires: new Date(Date.now() + expiration),
+      //     secure: false, // set to true if your using https
+      //     httpOnly: true,
+      //   })
+      //   .status(200)
+      //   .json({
+      //     // "userId": result.userId,
+      //     name: user.name,
+      //     email: user.email,
+      //     token: {
+      //       access_token: accesstoken,
+      //       expires_in: jwt.decode(accesstoken).exp,
+      //       token_type: "bearer",
+      //     },
+      //   });
+    }
   }
 }
