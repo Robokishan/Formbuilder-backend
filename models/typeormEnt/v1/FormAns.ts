@@ -5,19 +5,33 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Forms } from "./Forms";
 
 @ObjectType()
 @Entity()
 export class formanswers extends BaseEntity {
+  @Field()
   @PrimaryColumn({ name: "_id" })
   id: string;
 
   @Field(() => String)
   @Column({ nullable: true })
   form_id: string;
+
+  @OneToOne((type) => Forms)
+  @JoinColumn({
+    name: "form_id",
+    referencedColumnName: "id",
+  })
+  @Field()
+  @Column()
+  form_answers: Forms;
 
   @Field(() => String)
   @CreateDateColumn()
