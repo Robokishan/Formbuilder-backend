@@ -35,6 +35,7 @@
     "express": "^4.17.1",
     "express-list-endpoints": "^6.0.0",
     "graphql": "^15.7.2",
+    "graphql-type-json": "^0.3.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.5",
     "nodemon": "^2.0.12",

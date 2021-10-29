@@ -1,3 +1,4 @@
+import { GraphQLObjectType } from "graphql";
 import { Field, ObjectType } from "type-graphql";
 import {
   Entity,
@@ -9,6 +10,13 @@ import {
   Any,
   PrimaryColumn,
 } from "typeorm";
+import GraphQLJSON from "graphql-type-json";
+
+// @ObjectType()
+// class FormData {
+//   @Field()
+//   task_data: any;
+// }
 
 @ObjectType()
 @Entity()
@@ -28,13 +36,9 @@ export class Forms extends BaseEntity {
   @Column({ nullable: false })
   description: string;
 
-  @Field(() => String)
+  @Field(() => GraphQLJSON)
   @Column()
   form: object;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  created_at: Date;
 
   @Field(() => String)
   @UpdateDateColumn()

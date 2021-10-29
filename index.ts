@@ -45,7 +45,7 @@ async function main() {
     resolvers: [BookResolver, FormResolver], // add this
   });
   const server = new ApolloServer({ schema });
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   // Start listening
   app.listen(config.PORT, function () {
