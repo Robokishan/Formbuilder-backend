@@ -18,10 +18,12 @@ import { createConnection, Connection } from "typeorm";
 import "dotenv-safe/config";
 
 import path from "path";
-import { FormResolver } from "./controllers/typeGraphqlResolvers/Form";
+import { FormResolver } from "./controllers/typeGraphqlResolvers/FormResolver";
 import { Forms } from "./models/typeormEnt/v1/Forms";
-import { FormAns } from "./models/typeormEnt/v1/FormAns";
-import { User } from "./models/typeormEnt/v1/User";
+import { formanswers } from "./models/typeormEnt/v1/FormAns";
+import { Users } from "./models/typeormEnt/v1/User";
+import { UserResolver } from "./controllers/typeGraphqlResolvers/UserResolver";
+import { FormAnsResolver } from "./controllers/typeGraphqlResolvers/FormAnsResolver";
 
 async function main() {
   // Create server
@@ -36,13 +38,13 @@ async function main() {
     useUnifiedTopology: true,
     url: process.env.MONGODB_URL,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Forms, FormAns, User],
+    entities: [Forms, formanswers, Users],
   });
 
   //   await connection.connect();
 
   const schema = await buildSchema({
-    resolvers: [BookResolver, FormResolver], // add this
+    resolvers: [BookResolver, FormResolver, UserResolver, FormAnsResolver], // add this
   });
   const server = new ApolloServer({ schema });
   server.applyMiddleware({ app, cors: false });

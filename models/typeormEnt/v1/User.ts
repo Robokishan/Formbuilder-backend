@@ -5,12 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryColumn,
+  BaseEntity,
 } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 
 @ObjectType()
 @Entity()
-export class User {
+export class Users extends BaseEntity {
   @Field()
   @PrimaryColumn({ name: "_id", unique: true, nullable: false })
   id: string;

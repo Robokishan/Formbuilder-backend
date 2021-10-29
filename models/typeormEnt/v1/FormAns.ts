@@ -1,25 +1,33 @@
+import { GraphQLJSON } from "graphql-type-json";
+import { Field, ObjectType } from "type-graphql";
 import {
-  Entity,
+  BaseEntity,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
   PrimaryColumn,
+  UpdateDateColumn,
 } from "typeorm";
 
+@ObjectType()
 @Entity()
-export class FormAns {
+export class formanswers extends BaseEntity {
   @PrimaryColumn({ name: "_id" })
   id: string;
 
+  @Field(() => String)
   @Column({ nullable: true })
   form_id: string;
 
-  @Column()
-  answers: object;
-
+  @Field(() => String)
   @CreateDateColumn()
   created_at: Date;
 
+  @Field(() => String)
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Field(() => GraphQLJSON)
+  @Column()
+  answers: object;
 }
