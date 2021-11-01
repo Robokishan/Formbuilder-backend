@@ -24,15 +24,6 @@ export class formanswers extends BaseEntity {
   @Column({ nullable: true })
   form_id: string;
 
-  @OneToOne((type) => Forms)
-  @JoinColumn({
-    name: "form_id",
-    referencedColumnName: "id",
-  })
-  @Field({ nullable: true })
-  @Column()
-  form_answers: Forms;
-
   @Field(() => String)
   @CreateDateColumn()
   created_at: Date;
