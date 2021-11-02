@@ -1,4 +1,4 @@
-import { Query, Resolver, Root, UseMiddleware } from "type-graphql";
+import { Query, Resolver } from "type-graphql";
 import { Forms } from "../../models/typeormEnt/v1/Forms";
 
 @Resolver()

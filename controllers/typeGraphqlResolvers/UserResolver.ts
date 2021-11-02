@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Mutation,
@@ -9,6 +10,7 @@ import {
   Resolver,
 } from "type-graphql";
 import { Users } from "../../models/typeormEnt/v1/User";
+import { Context } from "../../types/Context";
 import {
   createAccessToken,
   verifyPassword,
@@ -67,8 +69,16 @@ export class UserResolver {
     return Users.find();
   }
 
+  // @Query(() => String)
+  // callString() {
+  //   return;
+  // }
+
   @Mutation(() => UserResponse)
-  async login(@Arg("options") options: EmailPasswordInput) {
+  async login(
+    @Arg("options") options: EmailPasswordInput,
+    @Ctx() { req, res }: Context
+  ) {
     const user = await Users.findOne({ email: options.email });
     const { isValid } = await verifyPassword(options.password, user);
     if (isValid != true) {
@@ -82,6 +92,11 @@ export class UserResolver {
       };
     } else {
       const accesstoken = createAccessToken(user);
+      res.cookie("token", accesstoken, {
+        // expires: new Date(Date.now() + expiration),
+        secure: false, // set to true if your using https
+        httpOnly: true,
+      });
       return {
         user: {
           name: user.name,

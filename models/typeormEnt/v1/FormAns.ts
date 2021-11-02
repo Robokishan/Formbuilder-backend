@@ -5,13 +5,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Forms } from "./Forms";
 
 @ObjectType()
 @Entity()

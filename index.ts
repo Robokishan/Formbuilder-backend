@@ -24,7 +24,8 @@ import { formanswers } from "./models/typeormEnt/v1/FormAns";
 import { Users } from "./models/typeormEnt/v1/User";
 import { UserResolver } from "./controllers/typeGraphqlResolvers/UserResolver";
 import { FormAnsResolver } from "./controllers/typeGraphqlResolvers/FormAnsResolver";
-
+import { Context } from "./types/Context";
+import cors from "cors";
 async function main() {
   // Create server
   var app = express();
@@ -44,10 +45,27 @@ async function main() {
   //   await connection.connect();
 
   const schema = await buildSchema({
-    resolvers: [FormResolver, UserResolver, FormAnsResolver], // add this
+    resolvers: [FormResolver, UserResolver, FormAnsResolver], // add this,
   });
-  const server = new ApolloServer({ schema });
-  server.applyMiddleware({ app, cors: false });
+  const server = new ApolloServer({
+    schema,
+    playground: true,
+    context: ({ req, res }) => {
+      const ctx: Context = {
+        req,
+        res,
+      };
+      return ctx;
+    },
+  });
+  server.applyMiddleware({ app });
+
+  // enable cors
+  var corsOptions = {
+    origin: ["http://localhost:3000"],
+    credentials: true, // <-- REQUIRED backend setting
+  };
+  app.use(cors(corsOptions));
 
   // Start listening
   app.listen(config.PORT, function () {
