@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:ts": "ts-node-dev --respawn index.ts",
+    "dev:ts": "ts-node-dev --respawn index.ts --deps --debug --clear --rs ",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"

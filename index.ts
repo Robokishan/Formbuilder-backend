@@ -26,6 +26,7 @@ import { UserResolver } from "./controllers/typeGraphqlResolvers/UserResolver";
 import { FormAnsResolver } from "./controllers/typeGraphqlResolvers/FormAnsResolver";
 import { Context } from "./types/Context";
 import cors from "cors";
+import { customAuthChecker } from "./utils/ts/AuthCheker";
 async function main() {
   // Create server
   var app = express();
@@ -46,6 +47,8 @@ async function main() {
 
   const schema = await buildSchema({
     resolvers: [FormResolver, UserResolver, FormAnsResolver], // add this,
+    authChecker: customAuthChecker,
+    authMode: "null",
   });
   const server = new ApolloServer({
     schema,

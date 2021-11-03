@@ -9,6 +9,7 @@ import {
   BaseEntity,
   Any,
   PrimaryColumn,
+  ObjectIdColumn,
 } from "typeorm";
 import GraphQLJSON from "graphql-type-json";
 

@@ -14,6 +14,10 @@ import { ObjectType, Field, Int } from "type-graphql";
 export class Users extends BaseEntity {
   @Field()
   @PrimaryColumn({ name: "_id", unique: true, nullable: false })
+  _id: string;
+
+  @Field()
+  @Column({ name: "id", unique: true, nullable: false })
   id: string;
 
   @Field()
