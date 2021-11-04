@@ -1,8 +1,9 @@
-import { Authorized, Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { getMongoRepository } from "typeorm";
 import { formanswers } from "../../models/typeormEnt/v1/FormAns";
 import { Forms } from "../../models/typeormEnt/v1/Forms";
 import { Context } from "../../types/Context";
+import { ObjectID } from "mongodb";
 
 @Resolver()
 export class FormAnsResolver {
@@ -61,5 +62,46 @@ export class FormAnsResolver {
     } catch (error) {
       console.log("Error", error);
     }
+  }
+
+  // There is a problem in this resolver
+  // it does not gives multiple value like form and its answers usually
+  // graphql does provide union type but i have to look into it
+
+  @Authorized()
+  @Query(() => formanswers)
+  async answer(
+    @Arg("answerId") answerId: string,
+    @Ctx() { req, res }: Context
+  ) {
+    const userId = req.userId;
+    // let formsManager = await getMongoRepository(Forms);
+    let answerManager = await getMongoRepository(formanswers);
+    let answer = await answerManager.findOne({
+      where: { _id: new ObjectID(answerId) },
+    });
+    // let asset = await formsManager.findOne({
+    //   where: {
+    //     user_id: userId,
+    //     _id: new ObjectID(answer.form_id),
+    //   },
+    // });
+    return answer;
+  }
+
+  // TODO: Untested code
+  @Authorized()
+  @Mutation(() => formanswers)
+  async deleteAnswer(
+    @Arg("answerid") answerId: string,
+    @Ctx() { req, res }: Context
+  ) {
+    const userId = req.userId;
+    let answerManager = await getMongoRepository(formanswers);
+    let answer = await answerManager.findOne({
+      where: { _id: new ObjectID(answerId) },
+    });
+    answerManager.findOneAndDelete({ where: { _id: new ObjectID(answerId) } });
+    return answer;
   }
 }
