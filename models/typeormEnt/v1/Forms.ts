@@ -22,6 +22,7 @@ import GraphQLJSON from "graphql-type-json";
 @ObjectType()
 @Entity()
 export class Forms extends BaseEntity {
+  @Field()
   @PrimaryColumn({ name: "_id" })
   id: string;
 
