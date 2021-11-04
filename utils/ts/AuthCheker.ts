@@ -33,9 +33,6 @@ export const customAuthChecker: AuthChecker = async (
       //   no need it is just to check if user has changed password nor not
       //   const user = await Users.findOne({ id: decoded.userId });
       //   req.userId = decoded.userId;
-      jwt.verify(token, config.SECRET, (err, decoded) => {
-        console.log(err, decoded);
-      });
       (context as any).req = {
         ...req,
         userId: decoded.userId,
@@ -45,5 +42,6 @@ export const customAuthChecker: AuthChecker = async (
       console.log("Err", Err);
     }
   }
-  return !!token; // or false if access is denied
+  if (!!!token) throw new Error("Authorization error");
+  return !!token;
 };
