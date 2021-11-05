@@ -62,10 +62,13 @@ async function main() {
     },
   });
   server.applyMiddleware({ app });
-
   // enable cors
   var corsOptions = {
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:5000",
+      "http://localhost:3000",
+      "https://formbuilder-frontend.netlify.app",
+    ],
     credentials: true, // <-- REQUIRED backend setting
   };
   app.use(cors(corsOptions));
