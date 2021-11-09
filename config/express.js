@@ -16,7 +16,7 @@ var initApp = function () {
     app.use(cookieParser());
     console.log("version:", process.env.NODE_ENV);
     /* advance and easy way of setting cors */
-    app.use(cors());
+    // app.use(cors());
     routes(app);
     return app;
 };

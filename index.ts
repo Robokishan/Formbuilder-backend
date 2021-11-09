@@ -12,7 +12,7 @@ const listEndpoints = require("express-list-endpoints");
 
 // new methods
 import "reflect-metadata";
-const { ApolloServer } = require("apollo-server-express");
+import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createConnection, Connection } from "typeorm";
 import "dotenv-safe/config";
@@ -25,11 +25,16 @@ import { Users } from "./models/typeormEnt/v1/User";
 import { UserResolver } from "./controllers/typeGraphqlResolvers/UserResolver";
 import { FormAnsResolver } from "./controllers/typeGraphqlResolvers/FormAnsResolver";
 import { Context } from "./types/Context";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import { customAuthChecker } from "./utils/ts/AuthCheker";
 async function main() {
   // Create server
   var app = express();
+  let originList = [
+    "http://localhost:5050",
+    "http://localhost:3000",
+    "https://formbuilder-frontend.netlify.app",
+  ];
 
   // Construct a schema, using GraphQL schema language
 
@@ -61,17 +66,16 @@ async function main() {
       return ctx;
     },
   });
-  server.applyMiddleware({ app });
   // enable cors
-  var corsOptions = {
-    origin: [
-      "http://localhost:5000",
-      "http://localhost:3000",
-      "https://formbuilder-frontend.netlify.app",
-    ],
+  var corsOptions: CorsOptions = {
+    origin: originList,
     credentials: true, // <-- REQUIRED backend setting
   };
-  app.use(cors(corsOptions));
+  // app.use(cors(corsOptions));
+  server.applyMiddleware({
+    app,
+    cors: corsOptions,
+  });
 
   // Start listening
   app.listen(config.PORT, function () {
